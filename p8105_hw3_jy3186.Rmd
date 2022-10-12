@@ -1,0 +1,26 @@
+---
+title: "p8105_hw3_jy3186"
+author: "Jiayi Yang"
+date: "2022-10-11"
+output: github_document
+---
+
+```{r}
+library(tidyverse)
+```
+##Problem 2
+load and tidy the data 
+```{r}
+accel_data = read_csv("./accel_data.csv") %>% 
+  janitor::clean_names() %>% 
+  mutate(
+    weekday_weekend = ifelse(day %in% c("Saturday","Sunday"), "Weekend", "Weekday"),
+    day_id = as.integer(day_id),
+    week = as.integer(week)
+  ) %>% 
+  relocate(weekday_weekend)
+accel_data
+```
+
+## R Markdown
+
