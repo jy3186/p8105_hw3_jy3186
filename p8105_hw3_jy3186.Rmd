@@ -8,6 +8,7 @@ output: github_document
 ```{r}
 library(tidyverse)
 library(dplyr)
+library(rnoaa)
 ```
 ##Problem 2
 load and tidy the data 
@@ -56,6 +57,57 @@ accel_eachday = accel_data %>%
   ) + 
     theme(legend.position = "bottom")
 accel_eachday
+```
+##Problem 3
+load data from web
+```{r}
+library(p8105.datasets)
+data("ny_noaa")
+ny_noaa_df = 
+  ny_noaa %>%
+    janitor::clean_names() %>% 
+  drop_na(tmax, tmin)%>% 
+ mutate(
+    tmax = as.integer(tmax),
+    tmin = as.integer(tmin)
+  ) %>% 
+  separate(date, into = c("year", "month", "day"), sep = "-") %>% 
+  mutate(
+    year = as.integer(year),
+    month = as.integer(month),
+    day = as.integer(day)
+  )
+ny_noaa_df
+
+```
+count snowfall
+```{r}
+
+ny_noaa_df %>% 
+  count(snow, na.rm = TRUE) %>% 
+  arrange(desc(n))
+```
+The most observed snowfall value is 0 with a 1167149 frequency of happening. Because there is usually no snow in most days of a year.
+
+January and July average max temperature
+```{r, message= FALSE}
+Jan_July_df = ny_noaa_df %>% 
+  filter(month == 1 |month == 7) %>% 
+  group_by(id, month, year) %>% 
+  mutate(tmax_mean = mean(tmax, na.rm = TRUE),
+         tmax_mean = as.integer(tmax_mean)) %>% 
+  summarize(tmax_mean)
+
+Jan_July_df
+ggplot(Jan_July_df, aes(x = year, y = tmax_mean), color = month) +
+ geom_point() + geom_line(alpha = .5) + geom_smooth(aes(group = month), se = FALSE)+
+  labs(
+    title = "average max tempeature of Jan and July from 1980 to 2010",
+    x = "year",
+    y = "average max temperature"
+  ) + 
+    theme(legend.position = "bottom")
+
 ```
 
 ## R Markdown
