@@ -80,6 +80,9 @@ ny_noaa_df =
 ny_noaa_df
 
 ```
+The data has weather information from 1981/1/1 to 2010/12/31, with variables such as prcp, snow, snwd, tmax, and tmin.
+
+
 count snowfall
 ```{r}
 
@@ -112,7 +115,7 @@ ggplot(Jan_July_df, aes(x = year, y = tmax_mean), color = month) +
 ```
 There are several outliers in both January and July average max temperatures. The observable structure for Janurary is wavy and for July is more toward a line (more linear).
 
-### Make a two-panel plot showing (i) tmax vs tmin for the full dataset (note that a scatterplot may not be the best option); 
+## Make a two-panel plot showing (i) tmax vs tmin for the full dataset (note that a scatterplot may not be the best option); 
 ```{r}
 tmax_vs_tmin = 
   ny_noaa_df %>% 
@@ -128,7 +131,7 @@ tmax_vs_tmin =
 
 tmax_vs_tmin
 ```
-### Make a plot showing the distribution of snowfall values greater than 0 and less than 100 separately by year
+## Make a plot showing the distribution of snowfall values greater than 0 and less than 100 separately by year
 ```{r}
 snowfall_plot =
   ny_noaa_df %>% 
@@ -146,4 +149,5 @@ snowfall_plot =
 
 snowfall_plot
 ```
+
 
