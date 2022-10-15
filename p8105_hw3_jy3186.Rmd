@@ -134,12 +134,12 @@ snowfall_plot =
   ny_noaa_df %>% 
   select(id, year, month, day, snow) %>% 
   filter(snow > 0 & snow < 100) %>% 
-  ggplot(aes(x= year, y = snow)) +
-  geom_violin(aes(fill = year), color = "blue", alpha = .5) +
+  ggplot(aes(x= snow, fill = year)) +
+  geom_density(color = "blue", alpha = .5) +
     labs(
     title = "Snowfall distribution (0-100) from 1980 to 2010",
     x = "year",
-    y = "snowfall"
+    y = "snowfall density"
   ) + 
     theme(legend.position = "bottom")
 
