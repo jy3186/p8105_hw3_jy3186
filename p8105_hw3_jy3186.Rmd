@@ -9,6 +9,7 @@ output: github_document
 library(tidyverse)
 library(dplyr)
 library(rnoaa)
+library(ggridges)
 ```
 ##Problem 2
 load and tidy the data 
@@ -141,7 +142,7 @@ snowfall_plot =
   geom_density(color = "blue", alpha = .5) +
     labs(
     title = "Snowfall distribution (0-100) from 1980 to 2010",
-    x = "year",
+    x = "snowfall",
     y = "snowfall density"
   ) + 
     theme(legend.position = "bottom")
