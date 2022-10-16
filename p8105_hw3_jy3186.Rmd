@@ -10,6 +10,7 @@ library(tidyverse)
 library(dplyr)
 library(rnoaa)
 library(ggridges)
+library(patchwork)
 ```
 ##Problem 2
 load and tidy the data 
@@ -47,10 +48,11 @@ accel_eachday = accel_data %>%
   pivot_longer(activity_1:activity_1440, names_to = "activity_min", values_to = "activity_value") %>% 
   separate(activity_min, c( NA, "activity"), sep = "_") %>% 
   mutate(
-    activity = as.integer(activity)
+    activity = as.integer(activity),
+    activity_value = as.integer(activity_value)
   ) %>% 
   ggplot(aes(x = activity, y = activity_value, color = day), se = FALSE) + 
-    geom_point() + geom_line(alpha = .5) + geom_smooth(aes(group = day), se = FALSE) +
+  geom_line(alpha = .5) + geom_smooth(aes(group = day), se = FALSE) +
     labs(
     title = "24-hour activity plot for each day",
     x = "minute",
