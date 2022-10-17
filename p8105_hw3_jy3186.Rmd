@@ -181,15 +181,13 @@ library(p8105.datasets)
 data("ny_noaa")
 ny_noaa_df = 
   ny_noaa %>%
-    janitor::clean_names() %>% 
-  drop_na(tmax, tmin)%>% 
  mutate(
     tmax = as.integer(tmax),
     tmin = as.integer(tmin)
   ) %>% 
+  drop_na(tmax, tmin) %>% 
   separate(date, into = c("year", "month", "day"), sep = "-") %>% 
   mutate(
-    year = as.integer(year),
     month = as.integer(month),
     day = as.integer(day)
   )
@@ -251,7 +249,7 @@ tmax_vs_tmin
 ```{r}
 snowfall_plot =
   ny_noaa_df %>% 
-  select(id, year, month, day, snow) %>% 
+  select(id, year, month, day, snow) %>%
   filter(snow > 0 & snow < 100) %>% 
   ggplot(aes(x= snow, fill = year)) +
   geom_density(color = "blue", alpha = .5) +
