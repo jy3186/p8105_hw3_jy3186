@@ -179,6 +179,20 @@ load data from web
 ```{r}
 library(p8105.datasets)
 data("ny_noaa")
+```
+
+The data contains `r nrow(ny_noaa)` rows and `r ncol(ny_noaa)` columns.
+The data has weather information from 1981/1/1 to 2010/12/31, with variables such as prcp, snow, snwd, tmax, and tmin.
+
+The units for each variable are:
+`id` weather station id;
+`prcp` precipitation (tenths of mm);
+`snwd` snow depth (mm);
+`tmax` maximum temperature (tenths of Celsius degrees);
+`tmin` minimum temperature (tenths of Celsius degrees); 
+
+
+```{r}
 ny_noaa_df = 
   ny_noaa %>%
  mutate(
@@ -194,7 +208,6 @@ ny_noaa_df =
 ny_noaa_df
 
 ```
-The data has weather information from 1981/1/1 to 2010/12/31, with variables such as prcp, snow, snwd, tmax, and tmin.
 
 
 count snowfall
