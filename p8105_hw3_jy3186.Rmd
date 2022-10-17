@@ -125,7 +125,8 @@ instacart %>%
 
 
 
-##Problem 2
+### Problem 2
+
 load and tidy the data 
 ```{r}
 accel_data = read_csv("./accel_data.csv") %>% 
@@ -139,7 +140,8 @@ accel_data = read_csv("./accel_data.csv") %>%
 accel_data
 ```
 There are `r nrow(accel_data)` observations and `r ncol(accel_data)` variables.
-There are four date variables `weekday_weekend`, `week`, `day_id` and `day`; and 1440 variables of activity observations.
+There are four date variables `weekday_weekend`, `week`, `day_id` and `day`; and there are `activity_` indicates the activity minutes;
+and there are 1440 variables of activity observations.
 
 aggregate activities and make a plot to show the trend
 ```{r}
@@ -174,7 +176,8 @@ accel_eachday = accel_data %>%
     theme(legend.position = "bottom")
 accel_eachday
 ```
-##Problem 3
+### Problem 3
+
 load data from web
 ```{r}
 library(p8105.datasets)
@@ -219,7 +222,7 @@ ny_noaa_df %>%
 ```
 The most observed snowfall value is 0 with a 1167149 frequency of happening. Because there is usually no snow in most days of a year.
 
-### January and July average max temperature
+#### January and July average max temperature
 ```{r, message= FALSE}
 Jan_July_df = ny_noaa_df %>% 
   filter(month == 1 | month == 7) %>% 
@@ -242,7 +245,7 @@ ggplot(Jan_July_df, aes(x = year, y = tmax_mean), color = month) +
 ```
 There are several outliers in both January and July average max temperatures. The observable structure for Janurary is wavy and for July is more toward a line (more linear).
 
-## Make a two-panel plot showing (i) tmax vs tmin for the full dataset (note that a scatterplot may not be the best option); 
+#### Make a two-panel plot showing (i) tmax vs tmin for the full dataset (note that a scatterplot may not be the best option); 
 ```{r}
 tmax_vs_tmin = 
   ny_noaa_df %>% 
