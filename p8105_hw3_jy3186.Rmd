@@ -136,6 +136,11 @@ accel_data = read_csv("./accel_data.csv") %>%
     day_id = as.integer(day_id),
     week = as.integer(week)
   ) %>% 
+  pivot_longer(
+    activity_1:activity_1440,
+    names_to = "activity",
+    values_to = "activity_value"
+  ) %>% 
   relocate(weekday_weekend)
 accel_data
 ```
@@ -148,40 +153,41 @@ aggregate activities and make a plot to show the trend
 accel_data %>% 
   group_by(day_id) %>% 
   mutate(
-    activity_total =  sum(across(activity_1:activity_1440), na.rm = TRUE),
+    activity_total =  sum(activity_value, na.rm = TRUE),
     activity_total = as.integer(activity_total)
   ) %>% 
-  select(week, day, day_id, activity_total) %>% 
-  ggplot(aes(x = day_id, y = activity_total, color = day)) + 
-    geom_point() + geom_line() + 
-    theme(legend.position = "bottom")
+  pivot_wider(
+    names_from = "day",
+    values_from = "activity_total"
+  ) %>% 
+  select(Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday) %>% 
+  knitr::kable()
 ```
+There are no specific trend of the data shown from the table here.
+
 Make a single-panel plot that shows the 24-hour activity time courses for each day
 ```{r}
 accel_eachday = accel_data %>% 
-  select(day_id, day, week, activity_1:activity_1440) %>% 
-  pivot_longer(activity_1:activity_1440, names_to = "activity_min", values_to = "activity_value") %>% 
-  separate(activity_min, c( NA, "activity"), sep = "_") %>% 
-  mutate(
-    activity = as.integer(activity),
-    activity_value = as.integer(activity_value)
-  ) %>% 
   ggplot(aes(x = activity, y = activity_value, color = day), se = FALSE) + 
   geom_line(alpha = .5) + geom_smooth(aes(group = day), se = FALSE) +
     labs(
     title = "24-hour activity plot for each day",
     x = "minute",
-    y = "activity value at the minute"
+    y = "day"
   ) + 
     theme(legend.position = "bottom")
 accel_eachday
 ```
+This patient has a pattern to have higher activity minutes during weekdays than weekends.
+
+
 ### Problem 3
 
 load data from web
 ```{r}
 library(p8105.datasets)
 data("ny_noaa")
+
 ```
 
 The data contains `r nrow(ny_noaa)` rows and `r ncol(ny_noaa)` columns.
@@ -200,9 +206,11 @@ ny_noaa_df =
   ny_noaa %>%
  mutate(
     tmax = as.integer(tmax),
-    tmin = as.integer(tmin)
+    tmin = as.integer(tmin),
+   tmax = tmax/10,
+   tmin = tmin/10,
+   prcp = prcp/10
   ) %>% 
-  drop_na(tmax, tmin) %>% 
   separate(date, into = c("year", "month", "day"), sep = "-") %>% 
   mutate(
     month = as.integer(month),
@@ -220,7 +228,7 @@ ny_noaa_df %>%
   count(snow, na.rm = TRUE) %>% 
   arrange(desc(n))
 ```
-The most observed snowfall value is 0 with a 1167149 frequency of happening. Because there is usually no snow in most days of a year.
+The most observed snowfall value is 0 with a 2008508 frequency of happening. Because there is usually no snow in most days of a year.
 
 #### January and July average max temperature
 ```{r, message= FALSE}
@@ -237,7 +245,7 @@ ggplot(Jan_July_df, aes(x = year, y = tmax_mean), color = month) +
   labs(
     title = "Average Max temperature of Jan and July from 1980 to 2010",
     x = "Year",
-    y = "Average max temperature"
+    y = "Average max temperature (C)"
   ) + 
     theme(legend.position = "bottom") +
   facet_grid(. ~month)
@@ -251,7 +259,7 @@ tmax_vs_tmin =
   ny_noaa_df %>% 
   drop_na(tmax, tmin) %>% 
   select(id, year, month, day, tmax, tmin) %>% 
-  ggplot(aes(x = tmin, y = tmax)) + geom_line(aes(color = year), alpha = .5) +
+  ggplot(aes(x = tmin, y = tmax)) + geom_hex() +
   labs(
     title = "Temperature max vs min from 1980 to 2010",
     x = "tmin",
@@ -279,5 +287,9 @@ snowfall_plot =
 
 snowfall_plot
 ```
+```{r}
+tmax_vs_tmin + snowfall_plot
+```
+
 
 
